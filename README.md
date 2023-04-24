@@ -4,8 +4,9 @@ This is a fork of [markdown-it-kbd](https://github.com/jGleitz/markdown-it-kbd) 
 
 Notably, it includes the following changes:
 
-- Support for replacing key names with Unicode characters (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely.
+- Support for replacing key names with values using a map (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely. Comes with a built-in preset for macOS keys.
 - Support for transforming key names with a custom function (e.g. adding a prefix to all keys or capitalizing them). Fully customizable in the options, add your own transformations or disable it completely.
+- Support for case-sensitive key matching. Fully customizable in the options, disable it if you don't need it.
 
 ## Installation
 
@@ -20,52 +21,55 @@ yarn add markdown-it-kbd-better
 ## Usage
 
 ```js
-const markdownIt = require('markdown-it')
-const markdownItKbd = require('markdown-it-kbd-better')
+const markdownIt = require('markdown-it');
+const markdownItKbd = require('markdown-it-kbd-better');
 
-const md = markdownIt().use(markdownItKbd, { // ... options ... })
+const md = markdownIt().use(markdownItKbd);
 ```
 
 ## Options
 
-interface MarkdownItKbdOptions {
-replaceMap?: { [key: string]: string };
-transform?: (content: string) => string;
-}
+### `presets`
 
-### `replaceMap`
+Default: `['mac']`
 
-Type: `Record<string, string>` or `string`
+Enable built-in presets. Currently, the only built-in preset is `mac`, which replaces keys like `mac:cmd` with `⌘`, but more may be added in the future (feel free to open an issue if you have a suggestion).
 
-Default: `replaceMap: {}`
-
-A map of key names to their replacement. If a key name is present in this map, it will be replaced with the corresponding value.
-
-For example, you could use the built-in `mac` map preset to replace keys like `mac:cmd` with `⌘`:
+To disable all built-in presets, set this to an empty array:
 
 ```js
 .use(markdownItKbd, {
-  replaceMap: 'mac'
+  presets: []
 })
 ```
 
-Or you could define your own map:
+### `keyMap`
+
+Default: `{}`
+
+A map of keys and values to replace. If the content of a KBD element is present in this map, it will be replaced with the corresponding value.
+
+For example, you could replace `option` with `⌥`:
 
 ```js
 .use(markdownItKbd, {
-    replaceMap: {
-        'option': '⌥ Option', // Replace `option` with `⌥ Option`
+    keyMap: {
+        'option': '⌥'
     }
 }
 ```
 
+### `caseSensitive`
+
+Default: `false`
+
+Whether or not to match keys in a case-sensitive manner. If this is set to `false`, all keys will be converted to lowercase before being matched. Otherwise, they will be matched exactly as they appear in the map.
+
 ### `transform`
 
-Type: `(content: string) => string`
+Default: `return content;` (no transformation)
 
-Default: `transform: (content: string) => { return content; }`
-
-A function that transforms the key name. This is useful for things like capitalizing the key name or adding a prefix to it.
+A function that transforms the content. This is useful for things like capitalizing the key name or adding a prefix to it.
 
 For example, you could capitalize all key names:
 
