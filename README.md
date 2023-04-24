@@ -1,21 +1,92 @@
-# markdown-it-kbd [![Build Status](https://travis-ci.org/jGleitz/markdown-it-prism.svg?branch=master)](https://travis-ci.org/jGleitz/markdown-it-kbd) [![npm version](https://badge.fury.io/js/markdown-it-kbd.svg)](https://badge.fury.io/js/markdown-it-kbd) [![Bower version](https://badge.fury.io/bo/markdown-it-kbd.svg)](https://badge.fury.io/bo/markdown-it-kbd)
-> [markdown-it](https://github.com/markdown-it/markdown-it) plugin for keystrokes
+# markdown-it-kbd-better
 
-Renders `[[x]]` as `<kbd>x</kbd>`. ([`<kbd>`](http://www.w3schools.com/tags/tag_kbd.asp) is the tag for keystrokes).
+This is a fork of [markdown-it-kbd](https://github.com/jGleitz/markdown-it-kbd) with some tiny improvements just for myself.
 
-## Usage
-```js
-const md = require('markdown-it')();
-const kbd = require('markdown-it-kbd');
+Notably, it includes the following changes:
 
-md.use(kbd);
+- Support for replacing key names with Unicode characters (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely.
+- Support for transforming key names with a custom function (e.g. adding a prefix to all keys or capitalizing them). Fully customizable in the options, add your own transformations or disable it completely.
+
+## Installation
+
+```sh
+npm install markdown-it-kbd-better
 ```
 
-This plugin can also be used together with [`markdown-it-attrs`](https://github.com/arve0/markdown-it-attrs/).
+```sh
+yarn add markdown-it-kbd-better
+```
 
-## Syntax notes
+## Usage
 
-The end tag `]]` must be on the same line as the start tag `[[`.
+```js
+const markdownIt = require('markdown-it')
+const markdownItKbd = require('markdown-it-kbd-better')
 
-The characters “`[`” and “`]`” are not allowed within keystroke tags.
-If you need to use them, escape them with a backslash (i.e. `\[` or `\]`) or use HTML escape sequences (`&#91` for `[` or `&#93;` for `]`).
+const md = markdownIt().use(markdownItKbd, { // ... options ... })
+```
+
+## Options
+
+interface MarkdownItKbdOptions {
+replaceMap?: { [key: string]: string };
+transform?: (content: string) => string;
+}
+
+### `replaceMap`
+
+Type: `Record<string, string>` or `string`
+
+Default: `replaceMap: {}`
+
+A map of key names to their replacement. If a key name is present in this map, it will be replaced with the corresponding value.
+
+For example, you could use the built-in `mac` map preset to replace keys like `mac:cmd` with `⌘`:
+
+```js
+.use(markdownItKbd, {
+  replaceMap: 'mac'
+})
+```
+
+Or you could define your own map:
+
+```js
+.use(markdownItKbd, {
+    replaceMap: {
+        'option': '⌥ Option', // Replace `option` with `⌥ Option`
+    }
+}
+```
+
+### `transform`
+
+Type: `(content: string) => string`
+
+Default: `transform: (content: string) => { return content; }`
+
+A function that transforms the key name. This is useful for things like capitalizing the key name or adding a prefix to it.
+
+For example, you could capitalize all key names:
+
+```js
+.use(markdownItKbd, {
+    transform: (content: string) => {
+        return content.toUpperCase();
+    }
+})
+```
+
+Or you could add a prefix to all key names:
+
+```js
+.use(markdownItKbd, {
+    transform: (content: string) => {
+        return `Key: ${content}`;
+    }
+})
+```
+
+## License
+
+[MIT](LICENSE)
