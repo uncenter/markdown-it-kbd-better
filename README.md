@@ -31,16 +31,33 @@ const md = markdownIt().use(markdownItKbd);
 
 ### `presets`
 
-Default: `['mac']`
+Default: `[]`
 
-Enable built-in presets. Currently, the only built-in preset is `mac`, which replaces keys like `mac:cmd` with `⌘`, but more may be added in the future (feel free to open an issue if you have a suggestion).
+Enable built-in presets. Currently, the only built-in preset is `icons`, which replaces keys like `cmd` with `⌘`, but more may be added in the future (feel free to open an issue if you have a suggestion).
 
-To disable all built-in presets, set this to an empty array:
+To enable the `icons` preset, use the following:
 
 ```js
 .use(markdownItKbd, {
-  presets: []
+    presets: [{
+        name: 'icons'
+    }]
 })
+```
+
+You can optionally pass an `options` object to the preset to customize it. Currently, the only option is `prefix`, which is used to prefix the key name. For example, if you wanted to match `icon:cmd` instead of `cmd`, you could use the following:
+
+```js
+.use(markdownItKbd, {
+    presets: [
+        {
+            name: 'icons',
+            options: {
+                prefix: 'icon:'
+            }
+        }
+    ]
+}
 ```
 
 ### `keyMap`
@@ -49,12 +66,12 @@ Default: `{}`
 
 A map of keys and values to replace. If the content of a KBD element is present in this map, it will be replaced with the corresponding value.
 
-For example, you could replace `option` with `⌥`:
+For example, you could replace `win` with `⊞`:
 
 ```js
 .use(markdownItKbd, {
     keyMap: {
-        'option': '⌥'
+        win: '⊞'
     }
 }
 ```
