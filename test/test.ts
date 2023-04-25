@@ -15,6 +15,12 @@ describe('markdown-it-kbd', () => {
 	const presetWithPrefixMd = markdownit().use(markdownItKbd, {
 		presets: [{ name: 'icons', options: { prefix: 'icon-' } }],
 	});
+	const presetWithPrefixAndTransformMd = markdownit().use(markdownItKbd, {
+		presets: [{ name: 'icons', options: { prefix: 'icon:' } }],
+		transform: (content: string) => {
+			return content[0].toUpperCase() + content.slice(1);
+		},
+	});
 	const caseSensitiveMd = markdownit().use(markdownItKbd, {
 		caseSensitive: true,
 		keyMap: {
@@ -246,6 +252,23 @@ describe('markdown-it-kbd', () => {
 				trimmed(`
                 <h1>Test</h1>
                 <p>This: <kbd>cmd</kbd> won't match, but this: <kbd>⌘</kbd> will.</p>
+            `),
+			);
+		});
+
+		it(`matches with prefix and transform`, () => {
+			expect(
+				presetWithPrefixAndTransformMd.render(
+					trimmed(`
+                # Test
+
+                This: [[cmd]] won't match, but this: [[icon:cmd]] will.
+            `),
+				),
+			).toEqual(
+				trimmed(`
+                <h1>Test</h1>
+                <p>This: <kbd>Cmd</kbd> won't match, but this: <kbd>⌘</kbd> will.</p>
             `),
 			);
 		});
