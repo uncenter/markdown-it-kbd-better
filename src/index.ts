@@ -7,7 +7,7 @@ const ESCAPE_CHARACTER = '\\';
 const TAG = 'kbd';
 
 type MarkdownItKbdOptions = {
-	presets?: string[];
+	presets?: { name: string; options?: { prefix?: string } }[];
 	keyMap?: { [key: string]: string };
 	caseSensitive?: boolean;
 	transform?: (content: string) => string;
@@ -18,43 +18,58 @@ export default function kbdplugin(
 	options: MarkdownItKbdOptions,
 ) {
 	const replaceMapPresets: { [key: string]: { [key: string]: string } } = {
-		mac: {
-			'cmd:mac': '⌘',
-			'mac:cmd': '⌘',
-			'command:mac': '⌘',
-			'mac:command': '⌘',
-			'opt:mac': '⌥',
-			'mac:opt': '⌥',
-			'option:mac': '⌥',
-			'mac:option': '⌥',
-			'alt:mac': '⌥',
-			'mac:alt': '⌥',
-			'ctrl:mac': '⌃',
-			'mac:ctrl': '⌃',
-			'control:mac': '⌃',
-			'mac:control': '⌃',
+		icons: {
+			cmd: '⌘',
+			command: '⌘',
+			opt: '⌥',
+			option: '⌥',
+			ctrl: '⌃',
+			control: '⌃',
+			shift: '⇧',
+			ret: '⏎',
+			return: '⏎',
+			pageup: '⇞',
+			pagedown: '⇟',
+			backspace: '⌫',
+			delete: '⌦',
+			arrRight: '→',
+			arrLeft: '←',
+			arrUp: '↑',
+			arrDown: '↓',
+			capslock: '⇪',
+			tab: '⇥',
+			space: '␣',
+			enter: '⏎',
 		},
 	};
 
 	const defaults = {
-		presets: ['mac'],
+		presets: [],
 		keyMap: {},
 		caseSensitive: false,
 		transform: (content: string) => {
 			return content;
 		},
 	};
+
 	const opts = markdownit.utils.assign({}, defaults, options || {});
 	if (opts.presets) {
-		opts.presets.forEach((preset: string) => {
-			if (replaceMapPresets[preset]) {
-				opts.keyMap = markdownit.utils.assign(
-					{},
-					replaceMapPresets[preset],
-					opts.keyMap,
-				);
-			}
-		});
+		opts.presets.forEach(
+			(preset: { name: string; options?: { prefix?: string } }) => {
+				if (replaceMapPresets[preset.name]) {
+					const presetMap: any = replaceMapPresets[preset.name];
+					opts.keyMap = markdownit.utils.assign(
+						{},
+						...Object.keys(presetMap).map((key) => {
+							return {
+								[`${preset.options?.prefix || ''}${key}`]: presetMap[key],
+							};
+						}),
+						opts.keyMap,
+					);
+				}
+			},
+		);
 	}
 
 	function tokenize(state: StateInline, silent: boolean) {
