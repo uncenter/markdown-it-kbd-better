@@ -29,7 +29,7 @@
 		"lint:style": "eslint --fix --ext .ts src",
 		"build": "npm-run-all build:*",
 		"test": "jest",
-		"publish": "npm run lint && npm run build && np"
+		"go": "npm run lint && npm run build && np"
 	},
 	"devDependencies": {
 		"@babel/cli": "7.21.0",
