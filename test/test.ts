@@ -10,7 +10,10 @@ describe('markdown-it-kbd', () => {
 	const defaultMd = markdownit().use(markdownItKbd);
 	const attrsMd = markdownit().use(markdownItAttrs).use(markdownItKbd);
 	const presetMd = markdownit().use(markdownItKbd, {
-		presets: ['mac'],
+		presets: [{ name: 'icons' }],
+	});
+	const presetWithPrefixMd = markdownit().use(markdownItKbd, {
+		presets: [{ name: 'icons', options: { prefix: 'icon-' } }],
 	});
 	const caseSensitiveMd = markdownit().use(markdownItKbd, {
 		caseSensitive: true,
@@ -37,9 +40,9 @@ describe('markdown-it-kbd', () => {
 		},
 	});
 	const keyMapPresetMd = markdownit().use(markdownItKbd, {
-		presets: ['mac'],
+		presets: [{ name: 'icons' }],
 		keyMap: {
-			'mac:cmd': '---', // should override preset
+			cmd: '---', // should override preset
 		},
 	});
 
@@ -219,13 +222,30 @@ describe('markdown-it-kbd', () => {
 					trimmed(`
                 # Test
 
-                This combination is cool: [[mac:cmd]] + [[mac:opt]].
+                This combination is cool: [[cmd]] + [[opt]].
             `),
 				),
 			).toEqual(
 				trimmed(`
                 <h1>Test</h1>
                 <p>This combination is cool: <kbd>⌘</kbd> + <kbd>⌥</kbd>.</p>
+            `),
+			);
+		});
+
+		it('matches with presets.options.prefix', () => {
+			expect(
+				presetWithPrefixMd.render(
+					trimmed(`
+                # Test
+
+                This: [[cmd]] won't match, but this: [[icon-cmd]] will.
+            `),
+				),
+			).toEqual(
+				trimmed(`
+                <h1>Test</h1>
+                <p>This: <kbd>cmd</kbd> won't match, but this: <kbd>⌘</kbd> will.</p>
             `),
 			);
 		});
@@ -237,7 +257,7 @@ describe('markdown-it-kbd', () => {
 					trimmed(`
                 # Test
 
-                This combination is cool: [[mac:cmd]] + [[mac:opt]].
+                This combination is cool: [[cmd]] + [[opt]].
             `),
 				),
 			).toEqual(
