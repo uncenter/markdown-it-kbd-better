@@ -4,7 +4,7 @@ This is a fork of [markdown-it-kbd](https://github.com/jGleitz/markdown-it-kbd) 
 
 Notably, it includes the following changes:
 
-- Support for replacing key names with values using a map (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely. Comes with a built-in preset for macOS keys.
+- Support for replacing key names with values using a map (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely. Comes with a built-in preset for replacing some common keys with icons. You could use this to make macros like `copy` to `⌘+C` or `win:ctrl` to `⊞+Ctrl`.
 - Support for transforming key names with a custom function (e.g. adding a prefix to all keys or capitalizing them). Fully customizable in the options, add your own transformations or disable it completely.
 - Support for case-sensitive key matching. Fully customizable in the options, disable it if you don't need it.
 
@@ -16,6 +16,10 @@ npm install markdown-it-kbd-better
 
 ```sh
 yarn add markdown-it-kbd-better
+```
+
+```sh
+pnpm add markdown-it-kbd-better
 ```
 
 ## Usage
@@ -45,16 +49,14 @@ To enable the `icons` preset, use the following:
 })
 ```
 
-You can optionally pass an `options` object to the preset to customize it. Currently, the only option is `prefix`, which is used to prefix the key name. For example, if you wanted to match `icon:cmd` instead of `cmd`, you could use the following:
+You can optionally pass `prefix` as well, which is used to prefix the key name. For example, if you wanted to match `icon:cmd` (prefixed with `icon:`) instead of `cmd`, you could use the following:
 
 ```js
 .use(markdownItKbd, {
     presets: [
         {
             name: 'icons',
-            options: {
-                prefix: 'icon:'
-            }
+            prefix: 'icon:'
         }
     ]
 }
@@ -98,7 +100,7 @@ For example, you could capitalize all key names:
 })
 ```
 
-Or you could add a prefix to all key names:
+Or you could add a text to all key names:
 
 ```js
 .use(markdownItKbd, {
