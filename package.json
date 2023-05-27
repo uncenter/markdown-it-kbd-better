@@ -21,6 +21,9 @@
 		"type": "git",
 		"url": "https://github.com/uncenter/markdown-it-kbd-better.git"
 	},
+    "np": {
+        "cleanup": false
+    },
 	"scripts": {
 		"build:transpile": "babel ./src --out-dir build --extensions '.ts'",
 		"build:types": "tsc --project src",
