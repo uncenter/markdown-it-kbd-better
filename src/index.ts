@@ -7,7 +7,7 @@ const ESCAPE_CHARACTER = '\\';
 const TAG = 'kbd';
 
 type markdownItKbdOptions = {
-	presets?: { name: string; options?: { prefix?: string } }[];
+	presets?: { name: string; prefix?: string }[];
 	keyMap?: { [key: string]: string };
 	caseSensitive?: boolean;
 	transform?: (content: string) => string;
@@ -54,22 +54,20 @@ export default function kbdPlugin(
 
 	const opts = markdownIt.utils.assign({}, defaults, options || {});
 	if (opts.presets) {
-		opts.presets.forEach(
-			(preset: { name: string; options?: { prefix?: string } }) => {
-				if (replaceMapPresets[preset.name]) {
-					const presetMap: any = replaceMapPresets[preset.name];
-					opts.keyMap = markdownIt.utils.assign(
-						{},
-						...Object.keys(presetMap).map((key) => {
-							return {
-								[`${preset.options?.prefix || ''}${key}`]: presetMap[key],
-							};
-						}),
-						opts.keyMap,
-					);
-				}
-			},
-		);
+		opts.presets.forEach((preset: { name: string; prefix?: string }) => {
+			if (replaceMapPresets[preset.name]) {
+				const presetMap: any = replaceMapPresets[preset.name];
+				opts.keyMap = markdownIt.utils.assign(
+					{},
+					...Object.keys(presetMap).map((key) => {
+						return {
+							[`${preset?.prefix || ''}${key}`]: presetMap[key],
+						};
+					}),
+					opts.keyMap,
+				);
+			}
+		});
 	}
 
 	function tokenize(state: StateInline, silent: boolean) {

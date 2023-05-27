@@ -1,4 +1,4 @@
-import markdownit from 'markdown-it';
+import markdownIt from 'markdown-it';
 // @ts-ignore markdown-it-attrs has no types
 import markdownItAttrs from 'markdown-it-attrs';
 import markdownItKbd from '../src';
@@ -7,21 +7,21 @@ const trimmed = (text: string) =>
 	text.replace(/\n\s*/g, '\n').replace(/^\n/, '');
 
 describe('markdown-it-kbd', () => {
-	const defaultMd = markdownit().use(markdownItKbd);
-	const attrsMd = markdownit().use(markdownItAttrs).use(markdownItKbd);
-	const presetMd = markdownit().use(markdownItKbd, {
+	const defaultMd = markdownIt().use(markdownItKbd);
+	const attrsMd = markdownIt().use(markdownItAttrs).use(markdownItKbd);
+	const presetMd = markdownIt().use(markdownItKbd, {
 		presets: [{ name: 'icons' }],
 	});
-	const presetWithPrefixMd = markdownit().use(markdownItKbd, {
-		presets: [{ name: 'icons', options: { prefix: 'icon-' } }],
+	const presetWithPrefixMd = markdownIt().use(markdownItKbd, {
+		presets: [{ name: 'icons', prefix: 'icon:' }],
 	});
-	const presetWithPrefixAndTransformMd = markdownit().use(markdownItKbd, {
-		presets: [{ name: 'icons', options: { prefix: 'icon:' } }],
+	const presetWithPrefixAndTransformMd = markdownIt().use(markdownItKbd, {
+		presets: [{ name: 'icons', prefix: 'icon:' }],
 		transform: (content: string) => {
 			return content[0].toUpperCase() + content.slice(1);
 		},
 	});
-	const caseSensitiveMd = markdownit().use(markdownItKbd, {
+	const caseSensitiveMd = markdownIt().use(markdownItKbd, {
 		caseSensitive: true,
 		keyMap: {
 			tHiSwIlLnOtWoRk:
@@ -29,23 +29,23 @@ describe('markdown-it-kbd', () => {
 			THISWILLWORK: ':)',
 		},
 	});
-	const transformMdUpperCase = markdownit().use(markdownItKbd, {
+	const transformMdUpperCase = markdownIt().use(markdownItKbd, {
 		transform: (content: string) => {
 			return content.toUpperCase();
 		},
 	});
-	const transformMdPrefix = markdownit().use(markdownItKbd, {
+	const transformMdPrefix = markdownIt().use(markdownItKbd, {
 		transform: (content: string) => {
 			return 'prefix: ' + content;
 		},
 	});
-	const keyMapMd = markdownit().use(markdownItKbd, {
+	const keyMapMd = markdownIt().use(markdownItKbd, {
 		keyMap: {
 			'test:abc': 'ABC',
 			'test:def': 'DEF',
 		},
 	});
-	const keyMapPresetMd = markdownit().use(markdownItKbd, {
+	const keyMapPresetMd = markdownIt().use(markdownItKbd, {
 		presets: [{ name: 'icons' }],
 		keyMap: {
 			cmd: '---', // should override preset
@@ -239,13 +239,13 @@ describe('markdown-it-kbd', () => {
 			);
 		});
 
-		it('matches with presets.options.prefix', () => {
+		it('matches with presets.prefix', () => {
 			expect(
 				presetWithPrefixMd.render(
 					trimmed(`
                 # Test
 
-                This: [[cmd]] won't match, but this: [[icon-cmd]] will.
+                This: [[cmd]] won't match, but this: [[icon:cmd]] will.
             `),
 				),
 			).toEqual(
