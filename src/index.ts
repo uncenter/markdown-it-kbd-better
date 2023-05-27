@@ -13,7 +13,7 @@ type markdownItKbdOptions = {
 	transform?: (content: string) => string;
 };
 
-export default function kbdplugin(
+export default function kbdPlugin(
 	markdownIt: markdownIt,
 	options: markdownItKbdOptions,
 ) {
@@ -82,12 +82,10 @@ export default function kbdplugin(
 		let momChar = state.src.charAt(start);
 		let nextChar = state.src.charAt(start + 1);
 
-		// We are looking for two times the open symbol.
 		if (momChar !== MARKER_OPEN || nextChar !== MARKER_OPEN) {
 			return false;
 		}
 
-		// Find the end sequence
 		let openTagCount = 1;
 		let end = -1;
 		let skipNext = false;
@@ -129,7 +127,6 @@ export default function kbdplugin(
 		state.md.inline.tokenize(state);
 
 		const tokens = state.tokens;
-		// replace text tokens with mapped content
 		for (let i = tokens.length - 1; i >= 0; i--) {
 			const token = tokens[i];
 			const prevToken = tokens[i - 1] || {};
@@ -151,11 +148,8 @@ export default function kbdplugin(
 			}
 		}
 
-		// start tag
-		// reset pos and posMax
 		state.pos = end + 2;
 		state.posMax = max;
-		// end tag
 		state.push('kbd_close', TAG, -1);
 
 		return true;
