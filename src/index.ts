@@ -1,4 +1,4 @@
-import MarkdownIt from 'markdown-it';
+import markdownIt from 'markdown-it';
 import StateInline from 'markdown-it/lib/rules_inline/state_inline';
 
 const MARKER_OPEN = '[';
@@ -6,7 +6,7 @@ const MARKER_CLOSE = ']';
 const ESCAPE_CHARACTER = '\\';
 const TAG = 'kbd';
 
-type MarkdownItKbdOptions = {
+type markdownItKbdOptions = {
 	presets?: { name: string; options?: { prefix?: string } }[];
 	keyMap?: { [key: string]: string };
 	caseSensitive?: boolean;
@@ -14,8 +14,8 @@ type MarkdownItKbdOptions = {
 };
 
 export default function kbdplugin(
-	markdownit: MarkdownIt,
-	options: MarkdownItKbdOptions,
+	markdownIt: markdownIt,
+	options: markdownItKbdOptions,
 ) {
 	const replaceMapPresets: { [key: string]: { [key: string]: string } } = {
 		icons: {
@@ -52,13 +52,13 @@ export default function kbdplugin(
 		},
 	};
 
-	const opts = markdownit.utils.assign({}, defaults, options || {});
+	const opts = markdownIt.utils.assign({}, defaults, options || {});
 	if (opts.presets) {
 		opts.presets.forEach(
 			(preset: { name: string; options?: { prefix?: string } }) => {
 				if (replaceMapPresets[preset.name]) {
 					const presetMap: any = replaceMapPresets[preset.name];
-					opts.keyMap = markdownit.utils.assign(
+					opts.keyMap = markdownIt.utils.assign(
 						{},
 						...Object.keys(presetMap).map((key) => {
 							return {
@@ -160,5 +160,5 @@ export default function kbdplugin(
 
 		return true;
 	}
-	markdownit.inline.ruler.before('link', 'kbd', tokenize);
+	markdownIt.inline.ruler.before('link', 'kbd', tokenize);
 }
