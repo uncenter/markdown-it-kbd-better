@@ -1,6 +1,4 @@
-// @ts-expect-error
 import markdownIt from 'markdown-it';
-// @ts-expect-error
 import StateInline from 'markdown-it/lib/rules_inline/state_inline';
 
 const MARKER_OPEN = '[';

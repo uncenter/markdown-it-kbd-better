@@ -1,5 +1,5 @@
 import markdownIt from 'markdown-it';
-// @ts-ignore markdown-it-attrs has no types
+// @ts-ignore no types
 import markdownItAttrs from 'markdown-it-attrs';
 import markdownItKbd from '../src';
 
