@@ -11,15 +11,9 @@ Notably, it includes the following changes:
 ## Installation
 
 ```sh
-npm install markdown-it-kbd-better
-```
-
-```sh
-yarn add markdown-it-kbd-better
-```
-
-```sh
+npm i markdown-it-kbd-better
 pnpm add markdown-it-kbd-better
+yarn add markdown-it-kbd-better
 ```
 
 ## Usage
@@ -46,7 +40,7 @@ To enable the `icons` preset, use the following:
     presets: [{
         name: 'icons'
     }]
-})
+});
 ```
 
 You can optionally pass `prefix` as well, which is used to prefix the key name. For example, if you wanted to match `icon:cmd` (prefixed with `icon:`) instead of `cmd`, you could use the following:
@@ -59,7 +53,7 @@ You can optionally pass `prefix` as well, which is used to prefix the key name. 
             prefix: 'icon:'
         }
     ]
-}
+});
 ```
 
 ### `keyMap`
@@ -75,7 +69,7 @@ For example, you could replace `win` with `⊞`:
     keyMap: {
         win: '⊞'
     }
-}
+});
 ```
 
 ### `caseSensitive`
@@ -97,7 +91,7 @@ For example, you could capitalize all key names:
     transform: (content: string) => {
         return content.toUpperCase();
     }
-})
+});
 ```
 
 Or you could add a text to all key names:
@@ -107,7 +101,7 @@ Or you could add a text to all key names:
     transform: (content: string) => {
         return `Key: ${content}`;
     }
-})
+});
 ```
 
 ## License
