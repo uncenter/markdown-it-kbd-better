@@ -6,10 +6,13 @@ const MARKER_CLOSE = ']';
 const ESCAPE_CHARACTER = '\\';
 const TAG = 'kbd';
 
+type Preset = { name: string; prefix?: string };
+type KeyMap = { [key: string]: string };
 type markdownItKbdOptions = {
-	presets?: { name: string; prefix?: string }[];
-	keyMap?: { [key: string]: string };
+	presets?: Preset[];
+	keyMap?: KeyMap;
 	caseSensitive?: boolean;
+	// eslint-disable-next-line no-unused-vars
 	transform?: (content: string) => string;
 };
 
@@ -17,7 +20,7 @@ export default function kbdPlugin(
 	markdownIt: markdownIt,
 	options: markdownItKbdOptions,
 ) {
-	const replaceMapPresets: { [key: string]: { [key: string]: string } } = {
+	const presets: { [key: string]: KeyMap } = {
 		icons: {
 			cmd: '⌘',
 			command: '⌘',
@@ -43,7 +46,7 @@ export default function kbdPlugin(
 		},
 	};
 
-	const defaults = {
+	const defaults: markdownItKbdOptions = {
 		presets: [],
 		keyMap: {},
 		caseSensitive: false,
@@ -54,9 +57,9 @@ export default function kbdPlugin(
 
 	const opts = markdownIt.utils.assign({}, defaults, options || {});
 	if (opts.presets) {
-		opts.presets.forEach((preset: { name: string; prefix?: string }) => {
-			if (replaceMapPresets[preset.name]) {
-				const presetMap: any = replaceMapPresets[preset.name];
+		opts.presets.forEach((preset: Preset) => {
+			if (presets[preset.name]) {
+				const presetMap = presets[preset.name];
 				opts.keyMap = markdownIt.utils.assign(
 					{},
 					...Object.keys(presetMap).map((key) => {
@@ -71,9 +74,7 @@ export default function kbdPlugin(
 	}
 
 	function tokenize(state: StateInline, silent: boolean) {
-		if (silent) {
-			return false;
-		}
+		if (silent) return false;
 
 		const start = state.pos;
 		const max = state.posMax;
@@ -129,20 +130,18 @@ export default function kbdPlugin(
 			const token = tokens[i];
 			const prevToken = tokens[i - 1] || {};
 			if (token.type === 'text' && prevToken.type === 'kbd_open') {
-				const content = token.content;
-				if (opts.caseSensitive) {
-					if (content in opts.keyMap) {
-						token.content = opts.keyMap[content];
-					}
-				} else {
-					const lowerContent = content.toLowerCase();
-					if (lowerContent in opts.keyMap) {
-						token.content = opts.keyMap[lowerContent];
-					}
-				}
-				if (opts.transform) {
-					token.content = opts.transform(token.content);
-				}
+				const content = opts.caseSensitive
+					? token.content
+					: token.content.toLowerCase();
+
+				const keyMap = opts.caseSensitive
+					? opts.keyMap
+					: (Object.fromEntries(
+							Object.entries(opts.keyMap).map(([k, v]) => [k.toLowerCase(), v]),
+					  ) as KeyMap);
+
+				if (content in keyMap) token.content = keyMap[content];
+				if (opts.transform) token.content = opts.transform(token.content);
 			}
 		}
 
