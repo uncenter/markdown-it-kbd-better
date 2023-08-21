@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 
 import markdownIt from 'markdown-it';
 import markdownItAttrs from 'markdown-it-attrs';
-import markdownItKbd from '..';
+import markdownItKbd from '../src';
 
 const md = markdownIt().use(markdownItAttrs).use(markdownItKbd);
 

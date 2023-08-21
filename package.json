@@ -16,11 +16,18 @@
 	"files": [
 		"README.md",
 		"LICENSE",
-		"dist/index.mjs",
-		"dist/index.d.mts"
+		"dist/*"
 	],
-	"main": "dist/index.mjs",
-	"types": "dist/index.d.mts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"require": "./dist/index.js",
+			"import": "./dist/index.mjs",
+			"types": "./dist/index.d.ts"
+		}
+	},
 	"scripts": {
 		"build": "tsup",
 		"watch": "npm run build -- --watch src",

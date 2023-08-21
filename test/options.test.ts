@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
 import markdownIt from 'markdown-it';
-import markdownItKbd from '../.';
+import markdownItKbd from '../src';
 
 describe('keyMap', () => {
 	test('replace keys with values', () => {
