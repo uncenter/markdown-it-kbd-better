@@ -1,6 +1,6 @@
 {
 	"name": "markdown-it-kbd-better",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"description": "Markdown-it syntax add-on for the <kbd> tag, but with tiny improvements.",
 	"author": "uncenter (https://uncenter.dev)",
 	"repository": {
