@@ -16,21 +16,20 @@
 	"files": [
 		"README.md",
 		"LICENSE",
-		"dist/*"
+		"dist/"
 	],
-	"main": "./dist/index.js",
+	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"require": "./dist/index.js",
+			"require": "./dist/index.cjs",
 			"import": "./dist/index.mjs",
 			"types": "./dist/index.d.ts"
 		}
 	},
 	"scripts": {
-		"build": "tsup",
-		"watch": "npm run build -- --watch src",
+		"build": "unbuild",
 		"lint": "eslint --fix --ext .ts src",
 		"format": "prettier --write .",
 		"test": "vitest"
@@ -47,8 +46,8 @@
 		"eslint-config-prettier": "^9.0.0",
 		"markdown-it-attrs": "4.1.6",
 		"prettier": "^3.0.2",
-		"tsup": "^7.2.0",
 		"typescript": "5.1.6",
+		"unbuild": "^1.2.1",
 		"vitest": "^0.34.2"
 	},
 	"engines": {
