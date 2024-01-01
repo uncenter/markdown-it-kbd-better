@@ -2,11 +2,8 @@
 	"name": "markdown-it-kbd-better",
 	"version": "1.2.5",
 	"description": "Markdown-it syntax add-on for the <kbd> tag, but with tiny improvements.",
-	"author": "uncenter (https://uncenter.dev)",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/uncenter/markdown-it-kbd-better.git"
-	},
+	"author": "uncenter <hi@uncenter.dev>",
+	"repository": "uncenter/markdown-it-kbd-better",
 	"keywords": [
 		"markdown-it",
 		"markdown-it-plugin",
@@ -29,10 +26,10 @@
 		}
 	},
 	"scripts": {
+		"test": "vitest",
 		"build": "unbuild",
-		"lint": "eslint --fix --ext .ts src",
-		"format": "prettier --write .",
-		"test": "vitest"
+		"lint": "eslint .",
+		"format": "prettier --write ."
 	},
 	"dependencies": {
 		"markdown-it": "^13.0.1"
@@ -51,7 +48,7 @@
 		"vitest": "^0.34.2"
 	},
 	"engines": {
-		"node": ">=16.0.0"
+		"node": ">=18"
 	},
-	"packageManager": "pnpm@8.6.12"
+	"packageManager": "pnpm@8.13.1+sha256.9e5f62ce5f2b7d4ceb3c2848f41cf0b33032c24d683c7088b53f62b1885fb246"
 }
