@@ -1,9 +1,57 @@
 {
-	"extends": ["eslint:recommended", "prettier"],
+	"root": true,
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint", "unicorn", "import"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:unicorn/recommended",
+		"prettier"
+	],
 	"parserOptions": {
-		"requireConfigFile": false,
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
-	"parser": "@typescript-eslint/parser"
+	"rules": {
+		"@typescript-eslint/consistent-type-imports": "error",
+		"import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+		"import/no-duplicates": "error",
+		"import/first": "error",
+		"import/order": [
+			"error",
+			{
+				"newlines-between": "always",
+				"groups": [
+					"type",
+					"builtin",
+					"external",
+					"internal",
+					"parent",
+					"sibling",
+					"index",
+					"object"
+				],
+				"alphabetize": { "order": "asc", "caseInsensitive": true }
+			}
+		],
+		"import/newline-after-import": ["error", { "count": 1 }],
+		"unicorn/no-useless-undefined": ["error", { "checkArguments": false }],
+		"unicorn/text-encoding-identifier-case": "off",
+		"unicorn/filename-case": "off",
+		"unicorn/numeric-separators-style": "off",
+		"unicorn/prevent-abbreviations": "off"
+	},
+	"overrides": [
+		{
+			"files": ["test/**"],
+			"plugins": ["vitest"],
+			"extends": ["plugin:vitest/recommended"],
+			"rules": {
+				"vitest/consistent-test-it": ["error", { "fn": "test" }],
+				"vitest/no-standalone-expect": "error",
+				"vitest/no-test-return-statement": "error",
+				"vitest/prefer-lowercase-title": "error"
+			}
+		}
+	]
 }
