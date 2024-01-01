@@ -4,9 +4,9 @@ This is a fork of [markdown-it-kbd](https://github.com/jGleitz/markdown-it-kbd) 
 
 Notably, it includes the following changes:
 
-- Support for replacing key names with values using a map (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely. Comes with a built-in preset for replacing some common keys with icons. You could use this to make macros like `copy` to `⌘+C` or `win:ctrl` to `⊞+Ctrl`.
-- Support for transforming key names with a custom function (e.g. adding a prefix to all keys or capitalizing them). Fully customizable in the options, add your own transformations or disable it completely.
-- Support for case-sensitive key matching. Fully customizable in the options, disable it if you don't need it.
+-   Support for replacing key names with values using a map (e.g. `mac:cmd` -> `⌘`). Fully customizable in the options, add your own replacements or disable it completely. Comes with a built-in preset for replacing some common keys with icons. You could use this to make macros like `copy` to `⌘+C` or `win:ctrl` to `⊞+Ctrl`.
+-   Support for transforming key names with a custom function (e.g. adding a prefix to all keys or capitalizing them). Fully customizable in the options, add your own transformations or disable it completely.
+-   Support for case-sensitive key matching. Fully customizable in the options, disable it if you don't need it.
 
 ## Installation
 

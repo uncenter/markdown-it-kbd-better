@@ -1,5 +1,5 @@
-import markdownIt from 'markdown-it';
-import StateInline from 'markdown-it/lib/rules_inline/state_inline';
+import type MarkdownIt from 'markdown-it';
+import type StateInline from 'markdown-it/lib/rules_inline/state_inline';
 
 const MARKER_OPEN = '[';
 const MARKER_CLOSE = ']';
@@ -8,17 +8,16 @@ const TAG = 'kbd';
 
 type Preset = { name: string; prefix?: string };
 type KeyMap = { [key: string]: string };
-type markdownItKbdOptions = {
-	presets?: Preset[];
-	keyMap?: KeyMap;
-	caseSensitive?: boolean;
-	// eslint-disable-next-line no-unused-vars
-	transform?: (content: string) => string;
+type Options = {
+	presets: Preset[];
+	keyMap: KeyMap;
+	caseSensitive: boolean;
+	transform: (content: string) => string;
 };
 
 export default function kbdPlugin(
-	markdownIt: markdownIt,
-	options: markdownItKbdOptions,
+	markdownIt: MarkdownIt,
+	options: Partial<Options>,
 ) {
 	const presets: { [key: string]: KeyMap } = {
 		icons: {
@@ -46,7 +45,7 @@ export default function kbdPlugin(
 		},
 	};
 
-	const defaults: markdownItKbdOptions = {
+	const defaults: Options = {
 		presets: [],
 		keyMap: {},
 		caseSensitive: false,
@@ -55,22 +54,25 @@ export default function kbdPlugin(
 		},
 	};
 
-	const opts = markdownIt.utils.assign({}, defaults, options || {});
-	if (opts.presets) {
-		opts.presets.forEach((preset: Preset) => {
-			if (presets[preset.name]) {
-				const presetMap = presets[preset.name];
-				opts.keyMap = markdownIt.utils.assign(
-					{},
-					...Object.keys(presetMap).map((key) => {
-						return {
-							[`${preset?.prefix || ''}${key}`]: presetMap[key],
-						};
-					}),
-					opts.keyMap,
-				);
-			}
-		});
+	const opts = markdownIt.utils.assign(
+		{},
+		defaults,
+		options || {},
+	) as Options;
+
+	for (const preset of opts.presets) {
+		if (presets[preset.name]) {
+			const presetMap = presets[preset.name];
+			opts.keyMap = markdownIt.utils.assign(
+				{},
+				...Object.keys(presetMap).map((key) => {
+					return {
+						[`${preset?.prefix || ''}${key}`]: presetMap[key],
+					};
+				}),
+				opts.keyMap,
+			);
+		}
 	}
 
 	function tokenize(state: StateInline, silent: boolean) {
@@ -137,11 +139,15 @@ export default function kbdPlugin(
 				const keyMap = opts.caseSensitive
 					? opts.keyMap
 					: (Object.fromEntries(
-							Object.entries(opts.keyMap).map(([k, v]) => [k.toLowerCase(), v]),
+							Object.entries(opts.keyMap).map(([k, v]) => [
+								k.toLowerCase(),
+								v,
+							]),
 					  ) as KeyMap);
 
 				if (content in keyMap) token.content = keyMap[content];
-				if (opts.transform) token.content = opts.transform(token.content);
+				if (opts.transform)
+					token.content = opts.transform(token.content);
 			}
 		}
 

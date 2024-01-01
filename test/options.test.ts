@@ -1,6 +1,6 @@
+import markdownIt from 'markdown-it';
 import { describe, expect, test } from 'vitest';
 
-import markdownIt from 'markdown-it';
 import markdownItKbd from '../src';
 
 describe('keyMap', () => {

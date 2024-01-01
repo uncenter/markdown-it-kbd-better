@@ -1,6 +1,6 @@
+import markdownIt from 'markdown-it';
 import { expect, test } from 'vitest';
 
-import markdownIt from 'markdown-it';
 import markdownItKbd from '../src';
 
 const md = markdownIt().use(markdownItKbd);
