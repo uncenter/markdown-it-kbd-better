@@ -14,6 +14,7 @@ Notably, it includes the following changes:
 npm i markdown-it-kbd-better
 pnpm add markdown-it-kbd-better
 yarn add markdown-it-kbd-better
+bun add markdown-it-kbd-better
 ```
 
 ## Usage
@@ -60,14 +61,12 @@ You can optionally pass `prefix` as well, which is used to prefix the key name. 
 
 Default: `{}`
 
-A map of keys and values to replace. If the content of a KBD element is present in this map, it will be replaced with the corresponding value.
-
-For example, you could replace `win` with `⊞`:
+A map of keys and values to replace. If the content of a KBD element is present in this map, it will be replaced with the corresponding value. You can use it to replace symbols like with the `icons` preset, or maybe phrases like "copy":
 
 ```js
 .use(markdownItKbd, {
     keyMap: {
-        win: '⊞'
+        copy: '⌘+C'
     }
 });
 ```
