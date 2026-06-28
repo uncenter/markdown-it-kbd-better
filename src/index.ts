@@ -54,11 +54,7 @@ export default function kbdPlugin(
 		},
 	};
 
-	const opts = markdownIt.utils.assign(
-		{},
-		defaults,
-		options || {},
-	) as Options;
+	const opts = markdownIt.utils.assign({}, defaults, options || {}) as Options;
 
 	for (const preset of opts.presets) {
 		if (presets[preset.name]) {
@@ -99,7 +95,7 @@ export default function kbdPlugin(
 			}
 			if (momChar === MARKER_CLOSE && nextChar === MARKER_CLOSE) {
 				openTagCount -= 1;
-				if (openTagCount == 0) {
+				if (openTagCount === 0) {
 					// Found the end!
 					end = i;
 				}
@@ -139,15 +135,11 @@ export default function kbdPlugin(
 				const keyMap = opts.caseSensitive
 					? opts.keyMap
 					: (Object.fromEntries(
-							Object.entries(opts.keyMap).map(([k, v]) => [
-								k.toLowerCase(),
-								v,
-							]),
-					  ) as KeyMap);
+							Object.entries(opts.keyMap).map(([k, v]) => [k.toLowerCase(), v]),
+						) as KeyMap);
 
 				if (content in keyMap) token.content = keyMap[content];
-				if (opts.transform)
-					token.content = opts.transform(token.content);
+				if (opts.transform) token.content = opts.transform(token.content);
 			}
 		}
 

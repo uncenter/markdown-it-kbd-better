@@ -112,7 +112,7 @@ describe('transform', () => {
 			markdownIt()
 				.use(markdownItKbd, {
 					transform: (content: string) => {
-						return 'prefix: ' + content;
+						return `prefix: ${content}`;
 					},
 				})
 				.render(`[[test]]`),
